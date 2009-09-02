@@ -6,7 +6,7 @@ options:
   interval:
     name: iostat Interval
     notes: Report current usage as the average over this many seconds.
-    default: 3
+    default: 5 
   device:
     name: Device
     notes: The device to check, eg 'sda1'. If not specified, last one from iostat -dxk
