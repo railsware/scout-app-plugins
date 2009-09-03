@@ -2,7 +2,7 @@ class Iostat < Scout::Plugin
   def build_report
     # Using the second reading- avg since previous check
     output = iostat_output(device())
-    values,result=average_values(output),{}
+    values,result=values(output),{}
     [:rps, :wps, :rkbps, :wkbps, :await, :util].each{|k| result[k]=values[k]}
     report(result)
   rescue Exception => e
@@ -21,13 +21,13 @@ class Iostat < Scout::Plugin
     `#{iostat_command}`
   end
   
-  def average_values(output)
+  def values(output)
     # Expected output format: 
     # Device:         rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await  svctm  %util
     # xvda1             0.00     0.00    0.00    0.00     0.00     0.00     0.00     0.00    0.00   0.00   0.00 
     # take the device format fields
     #logger.info "extracting output format"
-    format=output.grep(/Device:/).last.gsub(/\//,'p').gsub(/(%|:)/,'').downcase.split[1..-1]
+    format=output.grep(/Device:/).last.gsub(/\//,'p').gsub(/(%|:)/,'').downcase.split
 
     #logger.info "extracting output average values"
     # take all the stat fields
