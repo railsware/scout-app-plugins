@@ -7,8 +7,8 @@ class Iostat < Scout::Plugin
     report(result)
   rescue Exception => e
     error "Couldn't parse output. Make sure you have iostat installed. #{e}"
-    log.error e
-    log.error "Output: #{output}"
+    # log.error e
+    # log.error "Output: #{output}"
   end
   
   private
@@ -17,7 +17,7 @@ class Iostat < Scout::Plugin
     command = option('command') || 'iostat -dxk'
     interval = option('interval') || 5
     iostat_command = "#{command} #{interval} 2 #{device}"
-    log.info "running iostat_output for #{iostat_command}"
+    # log.info "running iostat_output for #{iostat_command}"
     `#{iostat_command}`
   end
   
@@ -26,10 +26,10 @@ class Iostat < Scout::Plugin
     # Device:         rrqm/s   wrqm/s     r/s     w/s    rkB/s    wkB/s avgrq-sz avgqu-sz   await  svctm  %util
     # xvda1             0.00     0.00    0.00    0.00     0.00     0.00     0.00     0.00    0.00   0.00   0.00 
     # take the device format fields
-    #log.info "extracting output format"
+    # log.info "extracting output format"
     format=output.grep(/Device:/).last.gsub(/\//,'p').gsub(/(%|:)/,'').downcase.split
 
-    #log.info "extracting output average values"
+    # log.info "extracting output average values"
     # take all the stat fields
     raw_stats=output.split("\n").grep(/[0-9]+\.[0-9]+$/).last.split
 
