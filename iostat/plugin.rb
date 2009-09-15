@@ -42,6 +42,5 @@ class Iostat < Scout::Plugin
   def device
     root_dev=`mount`.grep(/ \/ /)[0].split[0].split('/').last
     option('device') || "#{root_dev} #{root_dev.gsub(/[0-9]/,'')}"
-  end
-  
+  end  
 end
