@@ -31,7 +31,7 @@ class MysqlQueryStatistics < Scout::Plugin
 
     report_hash = {}
     rows.each do |row|
-      name = rows
+      name = row.first
       value = calculate_counter(now, name, row.last.to_i)
       # only report if a value is calculated
       next unless value
