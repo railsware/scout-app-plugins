@@ -42,7 +42,7 @@ metadata:
     units: /sec
   Slow_queries:
       label: Slow Queries
-      units: /sec
+      units: /min
   Select_scan:
       label: Select Scan
       units: /sec
