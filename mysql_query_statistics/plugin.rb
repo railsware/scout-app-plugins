@@ -15,17 +15,15 @@ class MysqlQueryStatistics < Scout::Plugin
     host     = get_option(:host)
     port     = get_option(:port)
     socket   = get_option(:socket)
-    entries  = get_option(:entries) || "Com_insert Com_select Com_update Com_delete"
+    entries  = get_option(:entries).split(' ').to_set
 
-    ENTRIES = entries.split(' ').to_set
-    
     now = Time.now
     mysql = Mysql.connect(host, user, password, nil, (port.nil? ? nil : port.to_i), socket)
     result = mysql.query('SHOW /*!50002 GLOBAL */ STATUS')
     rows = []
     total = 0
     result.each do |row| 
-      rows << row if ENTRIES.include?(row.first)
+      rows << row if entries.include?(row.first)
 
       total += row.last.to_i if row.first[0..3] == 'Com_'
     end
