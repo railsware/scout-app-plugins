@@ -1,0 +1,58 @@
+options:
+  port:
+    name: monitoring Port
+    notes: By default 80 port is used
+    default: 80
+  command:
+    name: netstat Command
+    notes: The command used to display network connections
+    default: "netstat -an | grep LISTEN | awk '{ print $4 }' | grep -e ':80$' | wc -l"
+
+metadata:
+  closed:
+    label: CLOSED
+    precision: 0
+  listen:
+    label: LISTEN
+    precision: 0
+  syn_sent:
+    label: SYN_SENT
+    precision: 0
+  syn_rcvd:
+    label: SYN_RCVD
+    precision: 0
+  established:
+    label: ESTABLISHED
+    precision: 0
+  close_wait:
+    label: CLOSE_WAIT
+    precision: 0
+  last_ack:
+    label: LAST_ACK
+    precision: 0
+  fin_wait_1:
+    label: FIN_WAIT_1
+    precision: 0
+  fin_wait_2:
+    label: FIN_WAIT_2
+    precision: 0
+  closing:
+    label: CLOSING
+    precision: 0
+  time_wait:
+    label: TIME_WAIT
+    precision: 0
+
+
+triggers: 
+- max_value: 10000
+  type: peak
+  dname: established
+  population_size: 0
+- percentage_change: 60
+  type: trend
+  min_value: 1
+  window_reference: LAST_WEEK
+  dname: established
+  population_size: 0
+  direction: UP
