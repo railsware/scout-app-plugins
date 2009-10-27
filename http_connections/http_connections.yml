@@ -3,10 +3,16 @@ options:
     name: monitoring Port
     notes: By default 80 port is used
     default: 80
-  command:
+  netstat:
     name: netstat Command
-    notes: The command used to display network connections
-    default: "netstat -an | grep LISTEN | awk '{ print $4 }' | grep -e ':80$' | wc -l"
+    notes: The command used to collect network connections
+    default: "netstat -an"
+  awk:
+    name: awk script
+    notes: This script used to grab results column
+    default: "awk '{ print $4 }'"
+
+
 
 metadata:
   closed:
@@ -44,15 +50,8 @@ metadata:
     precision: 0
 
 
+
 triggers: 
 - max_value: 10000
   type: peak
   dname: established
-  population_size: 0
-- percentage_change: 60
-  type: trend
-  min_value: 1
-  window_reference: LAST_WEEK
-  dname: established
-  population_size: 0
-  direction: UP
