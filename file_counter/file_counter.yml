@@ -2,11 +2,11 @@ options:
   directory:
     name: directory
     notes: Traget directory
-    default: /var/log
+    default: '/var/log'
   command:
     name: command
-    notes: Command which used four counting. Examples: `ls -l | wc -l -2` or `find . -type f | wc -l`
-    default: find . -type f | wc -l
+    notes: 'Command which used four counting. Examples: `ls -l | wc -l -2` or `find . -type f | wc -l`'
+    default: 'find . -type f | wc -l'
 
 metadata:
   count:
