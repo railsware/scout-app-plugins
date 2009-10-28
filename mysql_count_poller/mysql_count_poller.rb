@@ -21,7 +21,7 @@ class MysqlCountPoller < Scout::Plugin
     query.strip!
     query.chomp!(';')
 
-    cmd = "#{mysql} --user='#{user}' --password='#{password}' --execute='#{query}\\G' | tail -n1"
+    cmd = "#{mysql} --user='#{user}' --host='#{host}' --password='#{password}' --execute='#{query}\\G' | tail -n1"
 
     `#{cmd}`
   end
