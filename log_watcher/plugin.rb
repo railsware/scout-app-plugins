@@ -1,6 +1,6 @@
 class ScoutMysqlSlow < Scout::Plugin
   
-  def init
+  def build_report
     @log_file_path = option("log_path").to_s.strip
     if log_file_path.empty?
       return error( "A path to the log file wasn't provided." )
@@ -14,15 +14,12 @@ class ScoutMysqlSlow < Scout::Plugin
     end
 
     @error_pipe = option("error_pipe").to_s.strip
-  end
-  
-  def build_report
-    init()
  
     last_run = memory(:last_run) || 0
     current_length = `wc -c #{@log_file_path}`.split(' ')[0].to_i
 
-    if (last_run > 0 ) { # don't run it the first time
+    # don't run it the first time
+    if (last_run > 0 ) { 
       read_length = current_length - last_run
 
       value = `tail -c #{read_length} #{@log_file_path} | #{@value_pipe}`.strip
