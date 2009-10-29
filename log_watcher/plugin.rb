@@ -1,4 +1,4 @@
-class ScoutMysqlSlow < Scout::Plugin
+class LogWatcher < Scout::Plugin
   
   def build_report
     @log_file_path = option("log_path").to_s.strip
