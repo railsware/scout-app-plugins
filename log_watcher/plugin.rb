@@ -5,10 +5,10 @@ class LogWatcher < Scout::Plugin
       return error( "A path to the log file wasn't provided." )
     end
 
-    @service_name = option("service_name").to_s.strip || log_file_path[/[^\/]+$/,0]
+    @service_name = option("service_name").to_s.strip || @log_file_path[/[^\/]+$/,0]
 
     @value_pipe = option("value_pipe").to_s.strip
-    if pipe.empty?
+    if @value_pipe.empty?
       return error( "A path to the log file wasn't provided." )
     end
 
