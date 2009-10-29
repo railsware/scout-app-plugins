@@ -27,7 +27,7 @@ class LogWatcher < Scout::Plugin
       read_length = current_length - last_run
 
       value = `tail -c #{read_length} #{@log_file_path} | #{@value_pipe}`.strip
-      report(:value => value, :error => error_pipe)
+      report(:value => value)
 
       errors = `tail -c #{read_length} #{@log_file_path} | #{@error_pipe}`.strip unless @error_pipe.empty?
       unless errors.to_s.empty?
