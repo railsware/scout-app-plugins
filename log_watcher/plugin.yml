@@ -1,0 +1,18 @@
+options:
+  log_path:
+    default: 
+    name: Full path to the the log file
+  service_name:
+    default: 
+    name: Name of the service - the owner of the log
+  pipe:
+    default: grep "something" | wc -l
+    name: A pipe command that goes right aftail tail #{log}
+  error_pipe:
+    default: egrep "PottencialError" | sort | uniq -c | sort -nr
+    name: A pipe command that goes right aftail tail #{log}
+ 
+metadata:
+  value:
+    unit: /min
+    precision: 2
