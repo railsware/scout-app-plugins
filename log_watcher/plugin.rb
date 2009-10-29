@@ -1,7 +1,6 @@
 class ScoutMysqlSlow < Scout::Plugin
-  needs "elif"
   
-  def initialize
+  def init
     @log_file_path = option("log_path").to_s.strip
     if log_file_path.empty?
       return error( "A path to the log file wasn't provided." )
@@ -18,7 +17,7 @@ class ScoutMysqlSlow < Scout::Plugin
   end
   
   def build_report
-    initialize
+    init()
  
     last_run = memory(:last_run) || 0
     current_length = `wc -c #{@log_file_path}`.split(' ')[0].to_i
