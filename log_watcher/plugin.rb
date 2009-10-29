@@ -1,7 +1,7 @@
 class LogWatcher < Scout::Plugin
   def init
     @log_file_path = option("log_path").to_s.strip
-    if log_file_path.empty?
+    if @log_file_path.empty?
       return error( "A path to the log file wasn't provided." )
     end
 
