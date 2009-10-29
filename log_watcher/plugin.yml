@@ -13,7 +13,7 @@ options:
     notes: A pipe command that goes right aftail tail #{log}
   error_pipe:
     default: egrep "PottencialError" | sort | uniq -c | sort -nr
-    name: Value Pipe
+    name: Error Pipe
     notes: A pipe command that goes right aftail tail #{log}
  
 metadata:
