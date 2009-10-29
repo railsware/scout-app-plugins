@@ -21,19 +21,20 @@ class LogWatcher < Scout::Plugin
     
     last_run = memory(:last_run) || 0
     current_length = `wc -c #{@log_file_path}`.split(' ')[0].to_i
+    value = 0
 
     # don't run it the first time
     if (last_run > 0 )
       read_length = current_length - last_run
 
       value = `tail -c #{read_length} #{@log_file_path} | #{@value_pipe}`.strip
-      report(:value => value)
 
       errors = `tail -c #{read_length} #{@log_file_path} | #{@error_pipe}`.strip unless @error_pipe.empty?
       unless errors.to_s.empty?
         alert(build_alert(errors), "")
       end
     end
+    report(:value => value)
     remember(:last_run, current_length)
   rescue Errno::ENOENT => error
     error(error.to_s)    
