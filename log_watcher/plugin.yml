@@ -5,7 +5,7 @@ options:
   service_name:
     default: 
     name: Name of the service - the owner of the log
-  pipe:
+  value_pipe:
     default: grep "something" | wc -l
     name: A pipe command that goes right aftail tail #{log}
   error_pipe:

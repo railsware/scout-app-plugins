@@ -1,0 +1,47 @@
+Log Watcher Plugin
+=================================
+Created by [Yaroslav Lazor](http://github.com/yaroslavlazor)
+
+Tail the difference(from the last run) of the log file and execute it through:
+- a pipe - to get a single value
+- and error pipe - to get a error body for the alert message
+
+Simple scenario:
+ just write a "grep 'error' | wc -l" pipe, which will report amount of errors
+
+Complex Example scenario:
+ you have a file /var/log/some.log
+
+ a service write the follogin data into it
+   2009-10-29 15:49:35 SendEmail qid=77 thread: 3 completed: 4 of 4 time: 759
+
+ or a following error message :
+   2009-10-29 16:13:37 SendEmail qid=77 thread=7 org.apache.commons.mail.EmailException: Sending the email to the following server failed : xx.xx.xx.xx:25
+ 
+ You can create two pipes. 
+ Value pipe that will count the difference between completed: x of y 
+   egrep -o "completed: [0-9]+ of [0-9]+" | awk '{split($0,vars," ");sum=sum+vars[4]-vars[2]}END{print sum}'
+ Output : number of non-completed items
+
+ Error pipe that will grep for "org.apache.commons.mail.EmailException" and show a uniq amount of errors
+   grep "org.apache.commons.mail.EmailException:" | awk '{gsub(/^....-..-.. ..:..:../,"date");gsub(/thread=[0-9]+/,"thread=x");print $0}' | sort | uniq -c | sort -nr 
+ Output : concatenated errors in unified format, date and thread number less
+   20 date SendEmail qid=5659170 thread=x org.apache.commons.mail.EmailException: Sending the email to the following server failed : xx.xx.xx.xx:25
+   20 date SendEmail qid=5659164 thread=x org.apache.commons.mail.EmailException: Sending the email to the following server failed : xx.xx.xx.xx:25
+   20 date SendEmail qid=5659158 thread=x org.apache.commons.mail.EmailException: Sending the email to the following server failed : xx.xx.xx.xx:25
+   20 date SendEmail qid=5659156 thread=x org.apache.commons.mail.EmailException: Sending the email to the following server failed : xx.xx.xx.xx:25
+   20 date SendEmail qid=5659154 thread=x org.apache.commons.mail.EmailException: Sending the email to the following server failed : xx.xx.xx.xx:25
+   20 date SendEmail qid=5659152 thread=x org.apache.commons.mail.EmailException: Sending the email to the following server failed : xx.xx.xx.xx:25
+   20 date SendEmail qid=5659148 thread=x org.apache.commons.mail.EmailException: Sending the email to the following server failed : xx.xx.xx.xx:25
+   19 date SendEmail qid=5659168 thread=x org.apache.commons.mail.EmailException: Sending the email to the following server failed : xx.xx.xx.xx:25
+   19 date SendEmail qid=5659162 thread=x org.apache.commons.mail.EmailException: Sending the email to the following server failed : xx.xx.xx.xx:25
+   19 date SendEmail qid=5659160 thread=x org.apache.commons.mail.EmailException: Sending the email to the following server failed : xx.xx.xx.xx:25
+    1 date SendEmail qid=5659150 thread=x org.apache.commons.mail.EmailException: Sending the email to the following server failed : xx.xx.xx.xx:25
+   
+Dependencies
+------------
+Requires gems : [set, mysql]
+
+Compatibility 
+-------------
+

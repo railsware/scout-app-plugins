@@ -9,7 +9,7 @@ class ScoutMysqlSlow < Scout::Plugin
 
     @service_name = option("service_name").to_s.strip || log_file_path[/[^\/]+$/,0]
 
-    @pipe = option("pipe").to_s.strip
+    @value_pipe = option("value_pipe").to_s.strip
     if pipe.empty?
       return error( "A path to the log file wasn't provided." )
     end
@@ -26,7 +26,7 @@ class ScoutMysqlSlow < Scout::Plugin
     if (last_run > 0 ) { # don't run it the first time
       read_length = current_length - last_run
 
-      value = `tail -c #{read_length} #{@log_file_path} | #{@pipe}`.strip
+      value = `tail -c #{read_length} #{@log_file_path} | #{@value_pipe}`.strip
       report(:value => value, :error => error_pipe)
 
       errors = `tail -c #{read_length} #{@log_file_path} | #{@error_pipe}`.strip unless @error_pipe.empty?
