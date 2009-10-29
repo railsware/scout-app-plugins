@@ -9,7 +9,7 @@ class LogWatcher < Scout::Plugin
 
     @value_pipe = option("value_pipe").to_s.strip
     if @value_pipe.empty?
-      return error( "A path to the log file wasn't provided." )
+      return error( "The value pipe cannot be empty" )
     end
 
     @error_pipe = option("error_pipe").to_s.strip
@@ -31,7 +31,7 @@ class LogWatcher < Scout::Plugin
 
       errors = `tail -c #{read_length} #{@log_file_path} | #{@error_pipe}`.strip unless @error_pipe.empty?
       unless errors.to_s.empty?
-        alert(build_alert(errors))
+        alert(build_alert(errors), "")
       end
     end
     remember(:last_run, current_length)
@@ -39,8 +39,8 @@ class LogWatcher < Scout::Plugin
     error(error.to_s)    
   end
   
-  def build_alert(errors, service)
-    subj = "Receiving errors from the #{service}"
+  def build_alert(errors)
+    subj = "Receiving errors from the #{@service}"
     body = errors+"\n\n"
     {:subject => subj, :body => body}
   end
