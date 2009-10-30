@@ -1,4 +1,4 @@
-class Iostat < Scout::Plugin
+class MPstat < Scout::Plugin
   def build_report
     # Using the second reading- avg since previous check
     output = stat_output
