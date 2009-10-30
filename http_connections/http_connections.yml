@@ -6,11 +6,15 @@ options:
   netstat:
     name: netstat Command
     notes: The command used to collect network connections
-    default: "netstat -an"
+    default: netstat -an
   awk:
     name: awk script
     notes: This script used to grab results column
-    default: "awk '{ print $4 }'"
+    default: awk '{ print $4" "$6 }'
+  sort:
+    name: sort script
+    notes: will be used to sort and group
+    default: sort | uniq -c | awk '{print $1\" \"$3}'
 
 
 
