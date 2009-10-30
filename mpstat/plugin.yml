@@ -19,13 +19,13 @@ metadata:
     units: %
   iowait:
     label: Idle for outstanding disk I/O request
-    units: kB/s
+    units: %
   irq:
     label: Interrupts
-    units: ms
+    units: %
   soft:
     label: Software interrupt
-    units: ms
+    units: %
   steal:
     label: Steal. VCPU Hypervisor
     units: %
