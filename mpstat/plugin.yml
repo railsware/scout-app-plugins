@@ -8,7 +8,6 @@ options:
     notes: Report current usage as the average over this many seconds.
     default: 5 
 metadata:
-:user, :nice, :sys, :iowait, :irq, :soft, :steal, :idle, :intrps
   user:
     label: User CPU Utilization
     units: %
