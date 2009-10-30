@@ -16,7 +16,7 @@ class MPstat < Scout::Plugin
   def stat_output()
     command = option('command') || 'mpstat'
     interval = option('interval') || 5
-    stat_command = "#{command} #{interval} 2 #{device}"
+    stat_command = "#{command} #{interval} 2"
     # log.info "running iostat_output for #{iostat_command}"
     `#{stat_command}`
   end
@@ -28,7 +28,7 @@ class MPstat < Scout::Plugin
 
     # take the format fields
     # log.info "extracting output format"
-    format=output.grep(/CPU:/).last.gsub(/\//,'p').gsub(/(%|:)/,'').downcase.split
+    format=output.grep(/CPU/).last.gsub(/\//,'p').gsub(/(%|:)/,'').downcase.split
 
     # log.info "extracting output average values"
     # take all the stat fields
