@@ -1,0 +1,49 @@
+options:
+  command:
+    name: mpstat Command
+    notes: The command used to display MP statistics
+    default: "mpstat"
+  interval:
+    name: iostat Interval
+    notes: Report current usage as the average over this many seconds.
+    default: 5 
+metadata:
+:user, :nice, :sys, :iowait, :irq, :soft, :steal, :idle, :intrps
+  user:
+    label: User CPU Utilization
+    units: %
+  nice:
+    label: User CPU Utilization (nice priority)
+    units: %
+  sys:
+    label: Kernel CPU Utilization
+    units: %
+  iowait:
+    label: Idle for outstanding disk I/O request
+    units: kB/s
+  irq:
+    label: Interrupts
+    units: ms
+  soft:
+    label: Software interrupt
+    units: ms
+  steal:
+    label: Steal. VCPU Hypervisor
+    units: %
+  idle:
+    label: Idle
+    units: %
+  intrps:
+    label: interrupts
+    units: /sec
+ 
+triggers:
+  - type: peak
+    dname: user
+    max_value: 80%
+  - type: sys
+    dname: user
+    max_value: 80%
+  - type: iowait
+    dname: user
+    max_value: 80%

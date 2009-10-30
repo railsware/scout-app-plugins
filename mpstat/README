@@ -1,0 +1,14 @@
+Improved IO Statistics Plugin
+=================================
+Created by [Yaroslav Lazor](http://github.com/yaroslavlazor)
+
+Reports the following MP staticics : user, nice, sys, iowait, irq, soft, steal, idle, intrps
+
+Dependencies
+------------
+Requires the mpstat command, usually provided by the sysstat package.
+
+Compatibility 
+-------------
+
+Works on Linux and OSX. 
