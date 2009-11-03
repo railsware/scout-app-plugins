@@ -41,20 +41,20 @@ metadata:
     label: Total Queries
     units: /sec
   Slow_queries:
-      label: Slow Queries
-      units: /min
+    label: Slow Queries
+    units: /sec
   Select_scan:
-      label: Select Scan
-      units: /sec
+    label: Select Scan
+    units: /sec
   Sort_rows:
-      label: Sort Rows
-      units: /sec
+    label: Sort Rows
+    units: /sec
   Sort_scan:
-      label: Sort scan
-      units: /sec
+    label: Sort scan
+    units: /sec
   Created_tmp_disk_tables:
-      label: Created tmp disk tables
-      units: /sec
+    label: Created tmp disk tables
+    units: /sec
 
 triggers:    
   - type: trend
