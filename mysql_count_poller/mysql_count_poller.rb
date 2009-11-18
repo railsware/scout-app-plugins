@@ -11,16 +11,16 @@ class MysqlCountPoller < Scout::Plugin
   private
 
   def query_output
-    mysql     = option('mysql') || 'mysql'
-    host      = option('host') || '127.0.0.1'
-    user      = option('user') || 'root'
-    password  = option('password') || ''
+    mysql     = option('mysql')     || 'mysql'
+    host      = option('host')      || '127.0.0.1'
+    user      = option('user')      || 'root'
+    password  = option('password')  || ''
     query     = option('query') || 'SELECT 0 as count;'
 
     query.strip!
     query.chomp!(';')
 
-    cmd = "#{mysql} --user='#{user}' --host='#{host}' --password='#{password}' --execute='#{query}\\G'"
+    cmd = %Q[#{mysql} --user="#{user}" --host="#{host}" --password="#{password}" --execute="#{query.gsub(/"/,'\"')}\\G"]
 
     result ={}
     Open3.popen3(cmd) do |stdin, stdout, stderr|
