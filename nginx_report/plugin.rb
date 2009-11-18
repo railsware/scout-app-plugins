@@ -24,7 +24,6 @@ class NginxReport < Scout::Plugin
           last_requests = memory(:requests)
           remember(:requests, current_requests)
           requests = (current_requests-last_requests)/(current_time-last_run) if last_requests && last_run
-          puts "requests #{requests}, last_requests:#{last_requests}, current_requests:#{current_requests}, current_time:#{current_time}, last_run:#{last_run}"
         end
       end
     }
