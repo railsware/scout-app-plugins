@@ -6,5 +6,5 @@ metadata:
   waiting:
     precision: 2
   requests:
-    unit: /sec
+    units: /sec
     precision: 2
