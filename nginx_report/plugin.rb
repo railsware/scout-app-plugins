@@ -18,7 +18,7 @@ class NginxReport < Scout::Plugin
     		  writing = $2
     		  waiting = $3
     		end
-    		current_requests = $3 if line =~ /^\s+(\d+)\s+(\d+)\s+(\d+)/
+    		current_requests = $3.to_i if line =~ /^\s+(\d+)\s+(\d+)\s+(\d+)/
     		last_requests = memory(:requests)
     		requests = (current_requests-last_requests)/(current_time-last_run) if last_requests && last_run
       	remember(:requests, current_requests)
