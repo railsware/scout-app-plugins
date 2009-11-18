@@ -12,16 +12,17 @@ class NginxReport < Scout::Plugin
 
   	open(url) {|f|
   	  f.each_line do |line|
-  		total = $1 if line =~ /^Active connections:\s+(\d+)/
-  		if line =~ /^Reading:\s+(\d+).*Writing:\s+(\d+).*Waiting:\s+(\d+)/
-  		  reading = $1
-  		  writing = $2
-  		  waiting = $3
-  		end
-  		current_requests = $3 if line =~ /^\s+(\d+)\s+(\d+)\s+(\d+)/
-  		last_requests = memory(:requests)
-  		requests = (current_requests-last_requests)/(current_time-last_run) if last_requests && last_run
-    	remember(:requests, current_requests)
+    		total = $1 if line =~ /^Active connections:\s+(\d+)/
+    		if line =~ /^Reading:\s+(\d+).*Writing:\s+(\d+).*Waiting:\s+(\d+)/
+    		  reading = $1
+    		  writing = $2
+    		  waiting = $3
+    		end
+    		current_requests = $3 if line =~ /^\s+(\d+)\s+(\d+)\s+(\d+)/
+    		last_requests = memory(:requests)
+    		requests = (current_requests-last_requests)/(current_time-last_run) if last_requests && last_run
+      	remember(:requests, current_requests)
+      	puts "requests #{requests}, last_requests:#{last_requests}, current_requests:#{current_requests}, current_time:#{current_time}, last_run:#{last_run}"
   	  end
   	}
   	remember(:last_run, current_time)
