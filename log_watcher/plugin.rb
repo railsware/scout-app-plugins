@@ -41,7 +41,7 @@ class LogWatcher < Scout::Plugin
   end
   
   def build_alert(errors)
-    subj = "Receiving errors from the #{@service}"
+    subj = "Receiving errors from the #{@service_name}"
     body = errors+"\n\n"
     {:subject => subj, :body => body}
   end
