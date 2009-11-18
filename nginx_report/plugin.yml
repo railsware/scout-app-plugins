@@ -1,0 +1,10 @@
+metadata:
+  reading:
+    precision: 2
+  writing:
+    precision: 2
+  waiting:
+    precision: 2
+  requests:
+    unit: /sec
+    precision: 2
