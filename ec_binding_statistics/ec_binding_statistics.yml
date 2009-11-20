@@ -48,79 +48,79 @@ metadata:
     precision: 0
   'vb-i41_deviation_in_perc':
     label: VB-i41 Deviation in Percentage
-    precision: 2
+    precision: 3
     units: '%'
   'vb-i42':
     label: VB-i42
     precision: 0
   'vb-i42_deviation_in_perc':
     label: VB-i42 Deviation in Percentage
-    precision: 2
+    precision: 3
     units: '%'
   'vb-i43':
     label: VB-i43
     precision: 0
   'vb-i43_deviation_in_perc':
     label: VB-i43 Deviation in Percentage
-    precision: 2
+    precision: 3
     units: '%'
   'vb-i45':
     label: VB-i45
     precision: 0
   'vb-i45_deviation_in_perc':
     label: VB-i45 Deviation in Percentage
-    precision: 2
+    precision: 3
     units: '%'
   'vb_total':
     label: VB Total
     precision: 0
   'vb_relative_std':
     label: VB Relative STD
-    precision: 2
+    precision: 3
   'vcb-i41':
     label: VCB-i41
     precision: 0
   'vcb-i41_deviation_in_perc':
     label: VCB-i41 Deviation in Percentage
-    precision: 2
+    precision: 3
     units: '%'
   'vcb-i43':
     label: VCB-i43
     precision: 0
   'vcb-i43_deviation_in_perc':
     label: VCB-i43 Deviation in Percentage
-    precision: 2
+    precision: 3
     units: '%'
   'vcb-i44':
     label: VCB-i44
     precision: 0
   'vcb-i44_deviation_in_perc':
     label: VCB-i44 Deviation in Percentage
-    precision: 2
+    precision: 3
     units: '%'
   'vcb-i45':
     label: VCB-i45
     precision: 0
   'vcb-i45_deviation_in_perc':
     label: VCB-i45 Deviation in Percentage
-    precision: 2
+    precision: 3
     units: '%'
   'vcb_total':
     label: VCB Total
     precision: 0
   'vcb_relative_std':
     label: VCB Relative STD
-    precision: 2
+    precision: 3
   'vnb-i40':
     label: VNB-i40
     precision: 0
   'vnb-i40_deviation_in_perc':
     label: VNB-i40 Deviation in Percentage
-    precision: 2
+    precision: 3
     units: '%'
   'vnb_total':
     label: VNB Total
     precision: 0
   'vnb_relative_std':
     label: VNB Relative STD
-    precision: 2
+    precision: 3
