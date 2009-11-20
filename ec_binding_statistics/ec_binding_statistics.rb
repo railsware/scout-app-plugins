@@ -99,10 +99,11 @@ class EcBindingStatistics < Scout::Plugin
    def group_report(statistics, group_pattern = nil)
      key = KEY    
      aggregated_stat = sum(statistics.values, key,group_pattern)
+     strored_as = aggregated_stat.dup
      total = aggregated_stat.values.inject(0){|r,v| r+v}
-     aggregated_stat.merge! aggregated_stat.inject({}){|memo,record| memo["#{record.to_a[0]}_deviation_in_perc"] = (record.to_a[1]*100/total - 100.0/aggregated_stat.keys.size ).abs;memo}
+     aggregated_stat.merge! strored_as.inject({}){|memo,record| memo["#{record.to_a[0]}_deviation_in_perc"] = (record.to_a[1]*100/total - 100.0/aggregated_stat.keys.size ).abs;memo}
 
-     aggregated_stat["#{group_pattern.source}_relative_std"] = relative_std(aggregated_stat.values) if group_pattern
+     aggregated_stat["#{group_pattern.source}_relative_std"] = relative_std(strored_as.values) if group_pattern
      aggregated_stat["#{group_pattern.source}_total"] = total
 
      aggregated_stat
