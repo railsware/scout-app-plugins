@@ -1,0 +1,16 @@
+EcConsoleBindingStatistics
+=================================
+ *_total - Total emails sent per group
+ *_deviation_in_perc - Standart Deviation devided by total(for group)
+ *_relative_std - Percentage of sent emails per ip - 100/total ips in group (for group)
+ vcb-i45 - VirtualCustomBInding-Ip45 - emails sent through this ip
+
+Created by [Oleksandr Mishyn](http://github.com/amishyn)
+
+
+Dependencies
+------------
+Ecelerity manage
+Requires the ecelerity console 
+Access to ec_console
+gem hpricot
