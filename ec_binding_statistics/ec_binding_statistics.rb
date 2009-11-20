@@ -1,6 +1,6 @@
 class EcBindingStatistics < Scout::Plugin
   needs 'open3','hpricot'
-  KEY = 'Successfully Delivered Messages'.freeze
+  KEY = 'Received Messages'.freeze
   
   def build_report      
     output = ec_console_output
