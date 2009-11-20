@@ -120,7 +120,7 @@ class EcBindingStatistics < Scout::Plugin
    def relative_std(values)
      total = values.inject(0){|r,v| r+v}
      average = total.to_f/values.size
-     Math.sqrt(values.map{|e| (average-e)**2}.inject(0){|r,v| r+v}.to_f/values.size).to_i*100/total
+     Math.sqrt(values.map{|e| (average-e)**2}.inject(0){|r,v| r+v}.to_f/values.size).to_f*100/total
    end   
    
 end
