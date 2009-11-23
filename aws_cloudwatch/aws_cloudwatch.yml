@@ -79,9 +79,9 @@ metadata:
     precision: 0
   FreeStorageSpace avg:
     label: Free Storage Space (avg)
-    units: bytes
+    units: Gbytes
     precision: 0
   FreeStorageSpace max:
     label: Free Storage Space (max)
-    units: bytes
+    units: Gbytes
     precision: 0

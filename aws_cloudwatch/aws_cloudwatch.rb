@@ -84,7 +84,7 @@ class AwsCloudwatch < Scout::Plugin
         :Period => sample_period.to_s,
         :Namespace => namespace,
         "Statistics.member.1" => "Average",
-        "Statistics.member.2" => "Maximum",
+        #"Statistics.member.2" => "Maximum",
         #"Statistics.member.3" => "Minimum",
         #"Statistics.member.4" => "Sum",
         "Dimensions.member.1.Name" => dimension_name,
@@ -101,12 +101,18 @@ class AwsCloudwatch < Scout::Plugin
         return
       end
       label, stats = response.structure
+      
+      stats.each do |stat|
+        if stat[:unit] == "Bytes"
+          stat[:average] = stat[:average].to_f / (1024 * 1024 * 1024)
+        end
+      end
 
       if !stats.is_a?(Array) || stats.empty?
         error(:subject=>"Something went wrong with AWS getMetricStatistics", :body=>response.inspect )
       end
 
-      report(label+" max"=>stats.first[:maximum], label+" avg"=>stats.first[:average])
+      report(label+" avg"=>stats.first[:average])
 
     end
   end
