@@ -1,3 +1,4 @@
+require 'AWS'
 class AwsCloudwatch < Scout::Plugin
   TIME_FORMAT='%Y-%m-%dT%H:%M:%S+00:00' unless const_defined?('TIME_FORMAT')
 
@@ -51,6 +52,7 @@ class AwsCloudwatch < Scout::Plugin
     end
 
     aws = CloudWatch::AWSAuthConnection.new(aws_access_key, aws_secret)
+    
 
     # Figure out a start and end time for the stats query. If we ran previously and remember the last_run_time,
     # then we just query from then to now. We also set the period to the DIFFERENCE so we only get one report during
@@ -74,6 +76,13 @@ class AwsCloudwatch < Scout::Plugin
       start_time = time - sample_period
     end
     remember(:last_run_time, time.to_s)
+    
+    if namespace == "AWS/RDS"
+      rds = AWS::RDS::Base.new(:access_key_id => aws_access_key, :secret_access_key => aws_secret)
+      inst = rds.describe_db_instances(:db_instance_identifier => dimension_value)
+      storage_space = inst.DescribeDBInstancesResult.DBInstances.DBInstance.AllocatedStorage.to_f
+      report("StorageSpace" => storage_space)
+    end
 
     # There will be one web service call for each measure
     measures.each do |measure|
@@ -84,9 +93,6 @@ class AwsCloudwatch < Scout::Plugin
         :Period => sample_period.to_s,
         :Namespace => namespace,
         "Statistics.member.1" => "Average",
-        #"Statistics.member.2" => "Maximum",
-        #"Statistics.member.3" => "Minimum",
-        #"Statistics.member.4" => "Sum",
         "Dimensions.member.1.Name" => dimension_name,
         "Dimensions.member.1.Value" => dimension_value
       }
@@ -101,20 +107,23 @@ class AwsCloudwatch < Scout::Plugin
         return
       end
       label, stats = response.structure
-      
-      stats.each do |stat|
-        if stat[:unit] == "Bytes"
-          stat[:average] = stat[:average].to_f / (1024 * 1024 * 1024)
-        end
-      end
 
       if !stats.is_a?(Array) || stats.empty?
         error(:subject=>"Something went wrong with AWS getMetricStatistics", :body=>response.inspect )
       end
+      
+      stats = stats.first
+      
+      if label == "FreeStorageSpace"
+        stats[:average] = stats[:average].to_f / (1024 * 1024 * 1024)
+        used_storage_space = storage_space - stats[:average]
+        report("UsedStorageSpace" => used_storage_space, "StorageSpace capacity" => used_storage_space / storage_space * 100)
+      end
 
-      report(label+" avg"=>stats.first[:average])
+      report(label => stats[:average])
 
     end
+ 
   end
 end
 

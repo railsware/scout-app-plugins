@@ -13,75 +13,62 @@ options:
     notes: AWS/EC2 or AWS/RDS
 
 metadata:
-  CPUUtilization max:
-    label: CPU Utilization (max)
+  CPUUtilization:
+    label: CPU Utilization
     units: %
     precision: 2
-  CPUUtilization avg:
-    label: CPU Utilization (avg)
+  NetworkIn:
+    label: Network In
+    units: bytes
+    precision: 0
+  NetworkOut:
+    label: Network Out
+    units: bytes
+    precision: 0
+  DiskReadBytes:
+    label: Disk Reads
+    units: bytes
+    precision: 0
+  DiskWriteBytes:
+    label: Disk Writes
+    units: bytes
+    precision: 0
+  DiskWriteOps:
+    label: Disk Write Op
+    units:
+    precision: 0
+  DiskReadOps:
+    label: Disk Read Ops
+    units:
+    precision: 0
+  DatabaseConnections:
+    label: Database Connections
+    units:
+    precision: 0
+  FreeStorageSpace:
+    label: Free Storage Space
+    units: Gbytes
+    precision: 0
+  UsedStorageSpace:
+    label: Used Storage Space
+    units: Gbytes
+    precision: 0
+  StorageSpace:
+    label: Storage Space
+    units: Gbytes
+    precision: 0
+  StorageSpace capacity:
+    label: Storage Space capacity
     units: %
     precision: 2
-  NetworkIn max:
-    label: Network In (max)
-    units: bytes
-    precision: 0
-  NetworkIn avg:
-    label: Network In (avg)
-    units: bytes
-    precision: 0
-  NetworkOut max:
-    label: Network Out (max)
-    units: bytes
-    precision: 0
-  NetworkOut avg:
-    label: Network Out (avg)
-    units: bytes
-    precision: 0
-  DiskReadBytes max:
-    label: Disk Reads (max)
-    units: bytes
-    precision: 0
-  DiskReadBytes avg:
-    label: Disk Reads (avg)
-    units: bytes
-    precision: 0
-  DiskWriteBytes max:
-    label: Disk Writes (max)
-    units: bytes
-    precision: 0
-  DiskWriteBytes avg:
-    label: Disk Writes (avg)
-    units: bytes
-    precision: 0
-  DiskWriteOps avg:
-    label: Disk Write Ops (avg)
-    units:
-    precision: 0
-  DiskWriteOps max:
-    label: Disk Write Ops (max)
-    units: 
-    precision: 0
-  DiskReadOps avg:
-    label: Disk Read Ops (avg)
-    units:
-    precision: 0
-  DiskReadOps max:
-    label: Disk Read Ops (max)
-    units:
-    precision: 0
-  DatabaseConnections avg:
-    label: Database Connections (avg)
-    units:
-    precision: 0
-  DatabaseConnections max:
-    label: Database Connections (max)
-    units:
-    precision: 0
-  FreeStorageSpace avg:
-    label: Free Storage Space (avg)
-    units: Gbytes
-    precision: 0
-  FreeStorageSpace max:
-    label: Free Storage Space (max)
-    units: Gbytes
-    precision: 0
+    
+triggers: 
+  - max_value: 90.0
+    type: peak
+    dname: StorageSpace capacity
+    population_size: 0
+  - max_value: 50.0
+    type: plateau
+    dname: CPUUtilization avg
+    population_size: 0
+    duration: 60
