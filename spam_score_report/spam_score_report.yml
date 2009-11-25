@@ -11,11 +11,11 @@ options:
 metadata:
   cmae_execution_time:
     label: CMAE checck execution time
-    precision: 5
+    precision: 4
     units: sec
 
   spam_assasin_execution_time:
     label: SpamAssasin checck execution time
-    precision: 5
+    precision: 4
     units: sec
       
