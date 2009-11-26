@@ -68,6 +68,7 @@ class EcBindingStatistics < Scout::Plugin
       result[:fields].merge! group_report(statistics,/vb/)
       result[:fields].merge! group_report(statistics,/vnb/)
       result[:fields].merge! group_report(statistics,/vcb/)
+      result[:fields].merge! group_report(statistics,/vtb/)
       
       error = stderr.gets
       error.chomp! if error
