@@ -23,7 +23,10 @@ options:
     name: command
     notes: command to be execute in ec_console
     default: binding summary
-
+  groups:
+    name: groups
+    notes: groups of ips for report collect(separated by comma)
+    default:  
 metadata:
   total:
     label: Total
