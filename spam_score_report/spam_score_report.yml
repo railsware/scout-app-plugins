@@ -1,0 +1,21 @@
+options:
+  service:
+    name: service
+    notes: service url
+    default: 'http://127.0.0.1:80'
+  webservice:
+    name: webservice
+    notes: webservice url
+    default: '127.0.0.1:80'
+    
+metadata:
+  cmae_execution_time:
+    label: CMAE checck execution time
+    precision: 4
+    units: sec
+
+  spam_assasin_execution_time:
+    label: SpamAssasin checck execution time
+    precision: 4
+    units: sec
+      

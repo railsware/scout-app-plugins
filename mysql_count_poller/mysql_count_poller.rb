@@ -1,9 +1,8 @@
 class MysqlCountPoller < Scout::Plugin
   def build_report
-    string = query_output_string.split(/:/).last
-    string.strip!
-
-    report(:count => string)
+    library_available? 'open3'    
+    report(query_output)
+    
   rescue Exception => e
     error "Couldn't parse output. Make sure you have proper SQL. #{e}"
     logger.error e
@@ -11,19 +10,27 @@ class MysqlCountPoller < Scout::Plugin
 
   private
 
-  def query_output_string
-    mysql     = option('mysql') || 'mysql'
-    host      = option('host') || '127.0.0.1'
-    user      = option('user') || 'root'
-    password  = option('password') || ''
-    query     = option('query') || 'SELECT 0;'
+  def query_output
+    mysql     = option('mysql')     || 'mysql'
+    host      = option('host')      || '127.0.0.1'
+    user      = option('user')      || 'root'
+    password  = option('password')  || ''
+    query     = option('query') || 'SELECT 0 as count;'
 
     query.strip!
     query.chomp!(';')
 
-    cmd = "#{mysql} --user='#{user}' --host='#{host}' --password='#{password}' --execute='#{query}\\G' | tail -n1"
+    cmd = %Q[#{mysql} --user="#{user}" --host="#{host}" --password="#{password}" --execute="#{query.gsub(/"/,'\"')}\\G"]
 
-    `#{cmd}`
+    result ={}
+    Open3.popen3(cmd) do |stdin, stdout, stderr|
+      while out = stdout.gets
+        next unless out.match(/:/)
+        line = out.split(/:/)
+        result[line.first.strip.to_sym] = line.last.strip
+      end
+    end     
+    result
   end
 
 end

@@ -18,7 +18,7 @@ options:
   query:
     name: mysql query
     notes: MySQL Query with ; delimeter. Result should be digit
-    default: 'SELECT 0;'
+    default: 'SELECT 0 as count;'
 
 metadata:
   count:

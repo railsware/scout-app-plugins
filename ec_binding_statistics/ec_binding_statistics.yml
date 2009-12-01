@@ -1,0 +1,129 @@
+options:
+  ec_console:
+    name: ec_console
+    notes: ec_console command or full path
+    default: ec_console
+  host:
+    name: host
+    notes: ec_console host
+    default: 127.0.0.1
+  port:
+    name: port
+    notes: ec_console port
+    default: 2025    
+  user:
+    name: User
+    notes: EcConsole User
+    default: admin
+  password:
+    name: Password
+    notes: EcConsole User Password
+    default: 
+  command:
+    name: command
+    notes: command to be execute in ec_console
+    default: binding summary
+  groups:
+    name: groups
+    notes: groups of ips for report collect(separated by comma)
+    default:  
+metadata:
+  total:
+    label: Total
+    precision: 0
+    
+  'mx1.ratepoint.com':
+    label: mx1.ratepoint.com
+    precision: 0
+  'mx1.ratepoint.com_perc':
+    label: mx1.ratepoint.com Deviation in Percentage
+    precision: 0
+    units: '%'
+  'mx2.ratepoint.com':
+    label: mx2.ratepoint.com
+    precision: 0
+  'mx2.ratepoint.com_perc':
+    label: mx2.ratepoint.com Deviation in Percentage
+    precision: 0
+    units: '%' 
+  'vb-i41':
+    label: VB-i41
+    precision: 0
+  'vb-i41_deviation_in_perc':
+    label: VB-i41 Deviation in Percentage
+    precision: 3
+    units: '%'
+  'vb-i42':
+    label: VB-i42
+    precision: 0
+  'vb-i42_deviation_in_perc':
+    label: VB-i42 Deviation in Percentage
+    precision: 3
+    units: '%'
+  'vb-i43':
+    label: VB-i43
+    precision: 0
+  'vb-i43_deviation_in_perc':
+    label: VB-i43 Deviation in Percentage
+    precision: 3
+    units: '%'
+  'vb-i45':
+    label: VB-i45
+    precision: 0
+  'vb-i45_deviation_in_perc':
+    label: VB-i45 Deviation in Percentage
+    precision: 3
+    units: '%'
+  'vb_total':
+    label: VB Total
+    precision: 0
+  'vb_relative_std':
+    label: VB Relative STD
+    precision: 3
+  'vcb-i41':
+    label: VCB-i41
+    precision: 0
+  'vcb-i41_deviation_in_perc':
+    label: VCB-i41 Deviation in Percentage
+    precision: 3
+    units: '%'
+  'vcb-i43':
+    label: VCB-i43
+    precision: 0
+  'vcb-i43_deviation_in_perc':
+    label: VCB-i43 Deviation in Percentage
+    precision: 3
+    units: '%'
+  'vcb-i44':
+    label: VCB-i44
+    precision: 0
+  'vcb-i44_deviation_in_perc':
+    label: VCB-i44 Deviation in Percentage
+    precision: 3
+    units: '%'
+  'vcb-i45':
+    label: VCB-i45
+    precision: 0
+  'vcb-i45_deviation_in_perc':
+    label: VCB-i45 Deviation in Percentage
+    precision: 3
+    units: '%'
+  'vcb_total':
+    label: VCB Total
+    precision: 0
+  'vcb_relative_std':
+    label: VCB Relative STD
+    precision: 3
+  'vnb-i40':
+    label: VNB-i40
+    precision: 0
+  'vnb-i40_deviation_in_perc':
+    label: VNB-i40 Deviation in Percentage
+    precision: 3
+    units: '%'
+  'vnb_total':
+    label: VNB Total
+    precision: 0
+  'vnb_relative_std':
+    label: VNB Relative STD
+    precision: 3

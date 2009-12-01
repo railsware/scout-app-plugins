@@ -1,0 +1,42 @@
+AWS CloudWatch plugin
+=====================
+
+This plugin uses AWS web service calls to fetch the following CloudWatch metrics for your EC2 instances:
+
+  NetworkIn NetworkOut DiskReadOps DiskWriteOps DiskReadBytes DiskWriteBytes CPUUtilization
+
+This plugin uses AWS web service calls to fetch the following CloudWatch metrics for your RDS instances:
+
+  CPUUtilization DatabaseConnections FreeStorageSpace
+
+Using this plugin, you can graph CloudWatch data, create alerts on CloudWatch, track trends  on CloudWatch, etc.
+Your Cloudwatch data will appear alongside all the other data collected by the Scout agent.
+
+Note, this plugin does not fetch EC2 Load Balancer Metrics. This plugin is in beta.
+
+
+Fetching metrics for one instance
+----------------------------------
+
+By default, the value you put in the "EC2 InstanceId or dimension" plugin option is treated as an EC2 InstanceId.
+EC2 InstanceIds currently look like this: i-48ac4920. Providing an InstanceID will fetch metrics for that instance alone.
+
+Providing the InstanceID is the easiest way to get started. You can get your InstanceID from the AWS web console
+(https://console.aws.amazon.com/ec2/home), or through the command line tools
+
+
+
+Autoscaling groups, etc
+----------------------------------
+
+Alterntively, you can fetch metrics by autoscaling group name, image id, or instance type. You will still get one set
+of numbers, but the numbers will be averaged from all the instances in the dimension you specifiy.
+
+To fetch Cloudwatch data across a different dimension, enter a key=value string in the "EC2 InstanceId or dimension".
+You can use:
+  
+  AutoScalingGroupName=YOUR_AUTOSCALING_GROUP_NAME
+  ImageId=YOUR_IMAGE_ID
+  InstanceType=YOUR_INSTANCE_TYPE
+  InstanceId=YOUR_IMAGE_ID (this is the same as providing the ImageId alone)
+

@@ -1,0 +1,74 @@
+options:
+  aws_access_key:
+    name: AWS Access Key
+    notes: Your Amazon Web Services Access key. 20-char alphanumeric, looks like 022QF06E7MXBSH9DHM02
+  aws_secret:
+    name: AWS Secret
+    notes: Your Amazon Web Services Secret key. 40-char alphanumeric, looks like kWcrlUX5JEDGMLtmEENIaVmYvHNif5zBd9ct81S
+  dimension:
+    name: EC2 InstanceId, RDS DBInstanceIdentifier or dimension
+    notes: Get your InstanceId from the AWS web console or command line tools. It looks like i-48ac4920. OR, specify any dimension as key=value. For example, AutoScalingGroupName=YOUR_GROUP_NAME. See README.
+  namespace:
+    name: Namespace
+    notes: AWS/EC2 or AWS/RDS
+
+metadata:
+  CPUUtilization:
+    label: CPU Utilization
+    units: %
+    precision: 2
+  NetworkIn:
+    label: Network In
+    units: bytes
+    precision: 0
+  NetworkOut:
+    label: Network Out
+    units: bytes
+    precision: 0
+  DiskReadBytes:
+    label: Disk Reads
+    units: bytes
+    precision: 0
+  DiskWriteBytes:
+    label: Disk Writes
+    units: bytes
+    precision: 0
+  DiskWriteOps:
+    label: Disk Write Op
+    units:
+    precision: 0
+  DiskReadOps:
+    label: Disk Read Ops
+    units:
+    precision: 0
+  DatabaseConnections:
+    label: Database Connections
+    units:
+    precision: 0
+  FreeStorageSpace:
+    label: Free Storage Space
+    units: Gbytes
+    precision: 0
+  UsedStorageSpace:
+    label: Used Storage Space
+    units: Gbytes
+    precision: 0
+  StorageSpace:
+    label: Storage Space
+    units: Gbytes
+    precision: 0
+  StorageSpace capacity:
+    label: Storage Space capacity
+    units: %
+    precision: 2
+    
+triggers: 
+  - max_value: 90.0
+    type: peak
+    dname: StorageSpace capacity
+    population_size: 0
+  - max_value: 50.0
+    type: plateau
+    dname: CPUUtilization avg
+    population_size: 0
+    duration: 60
