@@ -1,0 +1,18 @@
+Network Statistics Plugin
+=================================
+Created by [Yaroslav Lazor](http://github.com/yaroslavlazor)
+
+Reports the difference of mysql 'SHOW GLOBAL STATUS' of following fields :
+Per Second :
+ [Com_insert, Com_select, Com_update, Com_delete, Select_scan, Sort_rows, Sort_scan, Created_tmp_disk_tables]
+Per Minute :
+ [Slow_queries]
+List of fields is configurable
+
+Dependencies
+------------
+Requires gems : [set, mysql]
+
+Compatibility 
+-------------
+
