@@ -1,0 +1,15 @@
+Improved IO Statistics Plugin
+=================================
+Created by [Yaroslav Lazor](http://github.com/yaroslavlazor)
+
+Reports the following IO staticics : rps, wps, rkbps, wkbps, await, util
+Configurable per device or the device mounted to root partition.
+
+Dependencies
+------------
+Requires the iostat command, usually provided by the sysstat package.
+
+Compatibility 
+-------------
+
+Works on Linux and OSX. 
