@@ -14,7 +14,7 @@ class AwsCloudwatch < Scout::Plugin
     
     # Available measures for RDS instances:
     # CPUUtilization DatabaseConnections FreeStorageSpace
-    rds_measures=%w(CPUUtilization DatabaseConnections FreeStorageSpace)
+    rds_measures=%w(CPUUtilization DatabaseConnections FreeStorageSpace ReadIOPS WriteIOPS ReadLatency WriteLatency ReadThroughput WriteThroughput)
     namespaces = ['AWS/EC2', 'AWS/RDS']
     
     unless namespaces.include? namespace

@@ -61,6 +61,30 @@ metadata:
     label: Storage Space capacity
     units: %
     precision: 2
+  ReadIOPS:
+    label: Read disk I/O operations per second
+    units:
+    precision: 0
+  WriteIOPS:
+    label: Write disk I/O operations per second
+    units:
+    precision: 0
+  ReadLatency:
+    label: Time taken per Read disk I/O operation
+    units: 
+    precision: 0
+  WriteLatency:
+    label: Time taken per Write disk I/O operation
+    units: 
+    precision: 0
+  ReadThroughput:
+    label: Read from to disk per second
+    units: bytes
+    precision: 0
+  WriteThroughput:
+    label: Written to disk per second
+    units: bytes
+    precision: 0
     
 triggers: 
   - max_value: 90.0
