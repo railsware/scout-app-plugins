@@ -65,9 +65,9 @@ class EcBindingStatistics < Scout::Plugin
       end
             
       result[:fields].merge! mta_distribution(statistics)
-      result[:fields].merge! group_report(statistics,/vb/)
-      result[:fields].merge! group_report(statistics,/vnb/)
-      result[:fields].merge! group_report(statistics,/vcb/)
+      (option(:groups)||'').split(',').each do |group_name|
+        result[:fields].merge! group_report(statistics,/#{group_name}/)
+      end
       
       error = stderr.gets
       error.chomp! if error

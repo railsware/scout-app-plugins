@@ -37,12 +37,15 @@ metadata:
     units: /sec
  
 triggers:
-  - type: peak
+  - type: plateau
     dname: user
-    max_value: 80%
-  - type: sys
-    dname: user
-    max_value: 80%
-  - type: iowait
-    dname: user
-    max_value: 80%
+    max_value: 80
+    duration: 10
+  - type: plateau
+    dname: sys
+    max_value: 80
+    duration: 10
+  - type: plateau
+    dname: iowait
+    max_value: 80
+    duration: 10
