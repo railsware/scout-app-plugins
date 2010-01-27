@@ -1,0 +1,29 @@
+options:
+  rabbitmqctl:
+    name: rabbitmqctl command
+    notes: The command used to run the rabbitctl program, minus arguments
+    default: sudo /usr/sbin/rabbitmqctl
+  queue_stat_params:
+    name: list_queues params
+    notes: params retrieved from queues
+    default: memory, messages
+metadata:
+  total_messages:
+    label: Total messages in rabbit
+    precision: 0
+  total_memory:
+    label: Total memory used
+    precision: 3
+    units: MB
+  connections:
+    label: Total active connections
+    precision: 0
+  queues:
+    label: Total queues
+    precision: 0       
+  queues:
+    label: Total exchanges
+    precision: 0
+  queues:
+    label: Total bindings
+    precision: 0
