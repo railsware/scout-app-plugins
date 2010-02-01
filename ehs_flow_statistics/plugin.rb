@@ -1,5 +1,5 @@
 class EhsFlowStatistics < Scout::Plugin
-  needs 'rp-stat'
+  needs 'rp-stats'
 
   MEGABYTE = 1048576
 
