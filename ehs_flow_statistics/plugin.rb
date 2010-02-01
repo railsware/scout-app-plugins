@@ -1,11 +1,14 @@
 class EhsFlowStatistics < Scout::Plugin
-  needs 'yaml'
   needs 'rp-stat'
 
-  KILOBYTE = 1024
   MEGABYTE = 1048576
 
   def build_report
-    report(data)
+    RpStats.load({ :hosts=> option(:redis) })
+
+    stats = RpStats.flush(option(:namespace))
+    stats[:io] = stats[:io].to_f / MEGABYTE
+
+    report(stats)
   end
 end

@@ -3,6 +3,14 @@ options:
     name: Flow Interval
     notes: Statistics flush interval
     default: 1
+  namespace:
+    default: default
+    name: Service name
+    notes: Name of the service which used for statistics grouping
+  redis:
+    default: 127.0.0.1:6379
+    name: Redis server
+    notes: Redis address and port. Default is 127.0.0.1:6379
 
 metadata:
   incoming:
