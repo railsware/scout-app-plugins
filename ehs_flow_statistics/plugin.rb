@@ -1,3 +1,5 @@
+require 'redis'
+
 class EhsFlowStatistics < Scout::Plugin
   needs 'rubygems', 'redis', 'rp-stats'
 
