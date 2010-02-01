@@ -1,5 +1,5 @@
 class EhsFlowStatistics < Scout::Plugin
-  needs 'rp-stats'
+  needs 'redis', 'rp-stats'
 
   MEGABYTE = 1048576
 
@@ -7,7 +7,7 @@ class EhsFlowStatistics < Scout::Plugin
     RpStats.load({ :hosts => option("redis") })
 
     stats = RpStats.flush(option("namespace"))
-    stats[:io] = stats[:io].to_f / MEGABYTE
+    stats["io"] = stats["io"].to_f / MEGABYTE
 
     report(stats)
   end
