@@ -1,0 +1,26 @@
+options:
+  interval:
+    name: Flow Interval
+    notes: Statistics flush interval
+    default: 1
+
+metadata:
+  incoming:
+    precision: 0
+  outgoing:
+    precision: 0
+  failed:
+    precision: 0
+  recovered:
+    precision: 0
+  io:
+    precision: 2
+    units: MB
+
+triggers:
+  - type: peak
+    dname: failed
+    max_value: 10
+  - type: peak
+    dname: recovered
+    max_value: 10
