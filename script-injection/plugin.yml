@@ -1,0 +1,22 @@
+options:
+  service_name:
+    default: ScriptInjection
+    name: Service name
+    notes: Service name
+  script_lang:
+    default: shell
+    name: Script Language 
+    notes: Supported languages shell and ruby
+  exec_script:
+    default: ps aux | grep httpd | wc -l
+    name: Script for execution
+    notes: This script will be executed on the server
+  value_name:
+    default: value
+    name: Value Name
+    notes: Name for aggregatable values
+
+metadata:
+  value:
+    unit: /min
+    precision: 2
