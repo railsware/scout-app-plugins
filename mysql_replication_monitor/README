@@ -1,0 +1,14 @@
+MySQL Query Poller
+=================================
+Created by [Dmitry Larkin](http://github.com/dml)
+
+Returs mysql replication staus.
+
+Dependencies
+------------
+Requires the mysql gem and mysql connection
+
+Compatibility 
+-------------
+
+HZ
