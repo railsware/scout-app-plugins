@@ -4,10 +4,8 @@ require 'date'
 class MissingLibrary < StandardError; end
 class MysqlReplicationMonitor < Scout::Plugin
 
-  
   attr_accessor :connection
-  
-  
+
   def setup_mysql
     begin
       require 'mysql'
@@ -21,7 +19,7 @@ class MysqlReplicationMonitor < Scout::Plugin
     end
     self.connection=Mysql.new(option(:host),option(:username),option(:password))
   end
-  
+
   def build_report
     begin
       setup_mysql
@@ -36,8 +34,8 @@ class MysqlReplicationMonitor < Scout::Plugin
         tm = memory(:replication_down_time).to_i + 1
         remember(:replication_down_time => tm)
         report("Replication Down Time" => tm)
-        alert("Replication not running",
-          "IO Slave: #{h["Slave_IO_Running"]}\nSQL Slave: #{h["Slave_SQL_Running"]}") unless in_ignore_window?
+        error("Replication not running",
+          "IO Slave: #{h["Slave_IO_Running"]}\nSQL Slave: #{h["Slave_SQL_Running"]}\nLast_Errno: #{h["Last_Error"]}\nLast_Errno: #{h["Last_Error"]}")
       end
     rescue  MissingLibrary=>e
       error("Could not load all required libraries",
@@ -46,21 +44,6 @@ class MysqlReplicationMonitor < Scout::Plugin
       error("Unable to connect to mysql: #{e}")
     rescue Exception=>e
       error("Got unexpected error: #{e} #{e.class}")
-    end
-  end
-
-  def in_ignore_window?
-    if s=option(:ignore_window_start) && e=option(:ignore_window_end)
-      start_time = Time.parse("#{Date.today} #{s}")
-      end_time = Time.parse("#{Date.today} #{e}")
-      
-      if start_time<end_time
-        return(Time.now > start_time and Time.now < end_time)
-      else
-        return(Time.now > start_time or Time.now < end_time)
-      end
-    else
-      false  
     end
   end
 
