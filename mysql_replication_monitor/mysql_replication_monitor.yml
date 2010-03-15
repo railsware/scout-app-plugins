@@ -1,4 +1,17 @@
 --- 
+options:
+  host:
+    name: Host
+    notes: MySQL Host
+    default: localhost
+  username:
+    name: User
+    notes: MySQL User
+    default: root
+  password:
+    name: Password
+    notes: MySQL Password
+    default: 
 metadata: !map:HashWithIndifferentAccess 
   Seconds Behind Master: !map:HashWithIndifferentAccess 
     units: ""
