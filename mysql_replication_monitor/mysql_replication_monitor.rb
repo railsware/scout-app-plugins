@@ -32,10 +32,18 @@ class MysqlReplicationMonitor < Scout::Plugin
         memory.delete(:replication_down_time) if memory(:replication_down_time).to_i > 0
       else
         tm = memory(:replication_down_time).to_i + 1
+
+        errors = [
+                  "IO Slave: #{h["Slave_IO_Running"]}",
+                  "SQL Slave: #{h["Slave_SQL_Running"]}",
+                  "Last_Errno: #{h["Last_Error"]}",
+                  "Last_Errno: #{h["Last_Error"]}"
+                 ].join("\n")
+
+        alert(build_alert(errors), "")
+
         remember(:replication_down_time => tm)
         report("Replication Down Time" => tm)
-        error("Replication not running",
-          "IO Slave: #{h["Slave_IO_Running"]}\nSQL Slave: #{h["Slave_SQL_Running"]}\nLast_Errno: #{h["Last_Error"]}\nLast_Errno: #{h["Last_Error"]}")
       end
     rescue  MissingLibrary=>e
       error("Could not load all required libraries",
@@ -45,6 +53,12 @@ class MysqlReplicationMonitor < Scout::Plugin
     rescue Exception=>e
       error("Got unexpected error: #{e} #{e.class}")
     end
+  end
+
+  def build_alert(errors)
+    subj = "MySQL Replication DOWN!!!"
+    body = errors+"\n\n"
+    {:subject => subj, :body => body}
   end
 
 end
