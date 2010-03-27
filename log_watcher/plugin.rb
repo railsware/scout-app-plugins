@@ -1,4 +1,29 @@
 class LogWatcher < Scout::Plugin
+  OPTIONS = <<-EOS
+    log_path:
+      default: /var/log/my.log
+      name: Log path
+      notes: Full path to the the log file
+    service_name:
+      default: MyService
+      name: Service name
+      notes: Name of the service - the owner of the log. Will be shown in the alert
+    value_pipe:
+      default: egrep "PottencialError" | egrep -v "Junk" | wc -l
+      name: Value Pipe
+      notes: A pipe command that goes right aftail tail #{log}
+    error_pipe:
+      default: egrep "PottencialError" | egrep -v "Junk" | sort | uniq -c | sort -nr
+      name: Error Pipe
+      notes: A pipe command that goes right aftail tail #{log} to aggregate the errors and send a notification over scout
+    EOS
+
+  METADATA = <<-EOS
+    value:
+      unit: /min
+      precision: 2
+    EOS
+
   def init
     @log_file_path = option("log_path").to_s.strip
     if @log_file_path.empty?
@@ -26,10 +51,9 @@ class LogWatcher < Scout::Plugin
     # don't run it the first time
     if (last_run > 0 )
       read_length = current_length - last_run
+      value  = `tail -c +#{last_run} #{@log_file_path} | head -c #{read_length} | #{@value_pipe}`.strip
+      errors = `tail -c +#{last_run} #{@log_file_path} | head -c #{read_length} | #{@error_pipe}`.strip unless @error_pipe.empty?
 
-      value = `tail -c #{read_length} #{@log_file_path} | #{@value_pipe}`.strip
-
-      errors = `tail -c #{read_length} #{@log_file_path} | #{@error_pipe}`.strip unless @error_pipe.empty?
       unless errors.to_s.empty?
         alert(build_alert(errors), "")
       end
