@@ -20,11 +20,11 @@ class NginxReport < Scout::Plugin
         end
 
         current_requests = $3.to_i if line =~ /^\s+(\d+)\s+(\d+)\s+(\d+)/
-        if (current_requests)
-          last_requests = memory(:requests)
-          remember(:requests, current_requests)
+        remember(:requests, current_requests) if current_requests
 
-          requests_sum = memory(:requests_sum)
+        last_requests = memory(:requests)
+        if (current_requests && last_requests)
+          requests_sum = memory(:requests_sum) || 0
           # we had a stats reload. remember known last big value
           if ( last_requests > current_requests )
             # most likely that the stats were reset half way in between stats gathering
@@ -35,8 +35,8 @@ class NginxReport < Scout::Plugin
             remember(:requests_sum, requests_sum)
           end
 
-          requests_total= r equests_sum + current_requests
-          requests_throughput = (current_requests-last_requests)/(current_time-last_run).to_f if last_requests && last_run
+          requests_total= requests_sum + current_requests
+          requests_throughput = (current_requests-last_requests)/(current_time-last_run).to_f
         end
       end
     }
