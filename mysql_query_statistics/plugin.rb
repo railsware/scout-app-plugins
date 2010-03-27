@@ -6,20 +6,26 @@ require 'set'
 
 class MysqlQueryStatistics < Scout::Plugin
   
-  needs "mysql"
+  # needs "mysql"
 
   def build_report
     # get_option returns nil if the option value is blank
+    mysql    = 'mysql'
     user     = get_option(:user) || 'root'
     password = get_option(:password)
     host     = get_option(:host)
     port     = get_option(:port)
     socket   = get_option(:socket)
     entries  = get_option(:entries).split(' ').to_set
+    query    = 'SHOW /*!50002 GLOBAL */ STATUS'
 
     now = Time.now
-    mysql = Mysql.connect(host, user, password, nil, (port.nil? ? nil : port.to_i), socket)
-    result = mysql.query('SHOW /*!50002 GLOBAL */ STATUS')
+    # mysql = Mysql.connect(host, user, password, nil, (port.nil? ? nil : port.to_i), socket)
+    # result = mysql.query('SHOW /*!50002 GLOBAL */ STATUS')
+
+    cmd = %Q[`#{mysql} --user="#{user}" --host="#{host}" --password="#{password}" --execute="#{query.gsub(/"/,'\"')}"`]
+    result = eval(cmd).split("\n").collect!{|row| row.split("\t")}[1..-1]
+
     rows = []
     total = 0
     result.each do |row| 
@@ -27,7 +33,6 @@ class MysqlQueryStatistics < Scout::Plugin
 
       total += row.last.to_i if row.first[0..3] == 'Com_'
     end
-    result.free
 
     report_hash = {}
     rows.each do |row|
@@ -37,7 +42,6 @@ class MysqlQueryStatistics < Scout::Plugin
       next unless value
       report_hash[name] = value
     end
-
 
     total_val = calculate_counter(now, 'total', total)
     report_hash['total'] = total_val if total_val
