@@ -71,7 +71,7 @@ class MysqlQueryStatistics < Scout::Plugin
         result = value - last_value
 
         # calculate per-second
-        result = result /  .to_f
+        result = result / elapsed_seconds.to_f
       end
     end
     remember(name => {:time => current_time, :value => value})
