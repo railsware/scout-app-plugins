@@ -18,5 +18,5 @@ options:
 
 metadata:
   value:
-  unit: /min
-      precision: 2
+    unit: /min
+    precision: 2
