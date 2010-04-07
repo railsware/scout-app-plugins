@@ -25,12 +25,12 @@ class NginxReport < Scout::Plugin
           # handle nginx stats reset
           current_requests = last_requests + current_requests if ( last_requests > current_requests )
           remember(:requests, current_requests)
-          requests_throughput = (current_requests-last_requests)/(current_time-last_run).to_f
+          requests = (current_requests-last_requests)/(current_time-last_run).to_f
         end
       end
     }
     remember(:last_run, current_time)
   
-    report({:total => total, :reading => reading, :writing => writing, :waiting => waiting, :requests => requests, :requests_throughput => requests_throughput})
+    report({:total => total, :reading => reading, :writing => writing, :waiting => waiting, :requests => requests})
   end
 end
