@@ -21,7 +21,7 @@ class NginxReport < Scout::Plugin
 
         if line =~ /^\s+(\d+)\s+(\d+)\s+(\d+)/
           current_requests = $3.to_i 
-          last_requests = memory(:requests) || current_requests
+          last_requests = (memory(:requests) || current_requests).to_i
           # handle nginx stats reset
           current_requests = last_requests + current_requests if ( last_requests > current_requests )
           remember(:requests, current_requests)
