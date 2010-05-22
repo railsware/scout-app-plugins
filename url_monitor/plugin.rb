@@ -5,64 +5,24 @@ require 'uri'
 
 class UrlMonitor < Scout::Plugin
   include Net
-  
+
   TEST_USAGE = "#{File.basename($0)} url URL last_run LAST_RUN"
   TIMEOUT_LENGTH = 50 # seconds
-  
+
   def build_report
-    url = option("url").to_s.strip
-    if url.empty?
+    urls = option("url").to_s.strip
+    if urls.empty?
       return error("A url wasn't provided.")
     end
-    
-    unless url =~ %r{\Ahttps?://}
-      url = "http://#{url}"
+    urls.split(";").each do |u|
+        check_url(u)
     end
-    
-    response = nil
-    response_time = Benchmark.realtime do
-      response = http_response(url)
-    end
-
-    report(:status => response.class.to_s[/^Net::HTTP(.*)$/, 1],
-           :response_time => response_time)
-    
-    is_up = valid_http_response?(response) ? 1 : 0
-    report(:up => is_up)
-    
-    if is_up != memory(:was_up)
-      if is_up == 0
-        alert("The URL [#{url}] is not responding", unindent(<<-EOF))
-            URL: #{url}
-
-            Code: #{response.code}
-            Status: #{response.class.to_s[/^Net::HTTP(.*)$/, 1]}
-            Message: #{response.message}
-          EOF
-        remember(:down_at => Time.now)
-      else
-        if memory(:was_up) && memory(:down_at)
-          alert( "The URL [#{url}] is responding again",
-                 "URL: #{url}\n\nStatus: #{response.class.to_s[/^Net::HTTP(.*)$/, 1]}. " +
-                 "Was unresponsive for #{(Time.now - memory(:down_at)).to_i} seconds")
-        else
-          alert( "The URL [#{url}] is responding",
-                 "URL: #{url}\n\nStatus: #{response.class.to_s[/^Net::HTTP(.*)$/, 1]}. ")
-        end
-        memory.delete(:down_at)
-      end
-    end
-    
-    remember(:was_up => is_up)
-  rescue Exception => e
-    error( "Error monitoring url [#{url}]",
-           "#{e.message}<br><br>#{e.backtrace.join('<br>')}" )
   end
-  
+
   def valid_http_response?(result)
-    [HTTPOK,HTTPFound].include?(result.class) 
+    [HTTPOK,HTTPFound].include?(result.class)
   end
-  
+
   # returns the http response (string) from a url
   def http_response(url)
     uri = URI.parse(url)
@@ -96,7 +56,7 @@ class UrlMonitor < Scout::Plugin
         response = e.to_s
       end
     end
-        
+
     return response
   end
 
@@ -104,4 +64,57 @@ class UrlMonitor < Scout::Plugin
     indentation = string[/\A\s*/]
     string.strip.gsub(/^#{indentation}/, "")
   end
+
+  def check_url(url)
+    url.to_s.strip
+    unless url =~ %r{\Ahttps?://}
+      url = "http://#{url}"
+    end
+    def url.wu(s)
+      "#{s}_#{self}".to_sym
+      end
+    #wx#u = Proc.new {|s| (s + "_" + url).to_sym  } 
+    response = nil
+    response_time = Benchmark.realtime do
+      response = http_response(url)
+    end
+    response_status = response.class.to_s[/^Net::HTTP(.*)$/, 1]
+
+    report(:status => response_status,
+           :response_time => response_time)
+
+    is_up = valid_http_response?(response) ? 1 : 0
+    report(url.wu("up") => is_up)
+
+    was_up_key=url.wu("was_up")
+    down_at_key=url.wu("down_at")
+    if is_up == 0
+      unless memory(down_at_key)
+        alert( "The URL [#{url}] is not responding",
+               "URL: #{url}\n\nStatus: #{response_status}. ")
+        remember(down_at_key => Time.now)
+      else
+        alert( "The URL [#{url}] is still not responding",
+               "URL: #{url}\n\nStatus: #{response_status}. " +
+               "Is unresponsive for #{(Time.now - memory(down_at_key)).to_i} seconds")
+      end
+    elsif is_up != memory(was_up_key)
+      unless (memory(was_up_key) && memory(down_at_key))
+        alert( "The URL [#{url}] is responding",
+               "URL: #{url}\n\nStatus: #{response_status}. ")
+      else
+        alert( "The URL [#{url}] is responding again",
+               "URL: #{url}\n\nStatus: #{response_status}. " +
+               "Was unresponsive for #{(Time.now - memory(down_at_key)).to_i} seconds")
+      end
+      memory.delete(down_at_key)
+    end
+    remember(was_up_key => is_up)
+  rescue Exception => e
+    error( "Error monitoring url [#{url}]",
+           "#{e.message}<br><br>#{e.backtrace.join('<br>')}" )
+  end
 end
+
+
+
