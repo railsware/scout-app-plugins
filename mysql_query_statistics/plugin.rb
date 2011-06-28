@@ -7,8 +7,17 @@ require 'set'
 class MysqlQueryStatistics < Scout::Plugin
   
   # needs "mysql"
+  needs "open3"
 
   def build_report
+    report( calculate_report( retreive_output( generate_command() ) ) )
+  rescue => error_message
+    error "Couldn't parse output. Make sure you have proper SQL. #{error_message}"
+  end
+
+  private
+  
+  def generate_command
     # get_option returns nil if the option value is blank
     mysql    = 'mysql'
     user     = get_option(:user) || 'root'
@@ -16,40 +25,48 @@ class MysqlQueryStatistics < Scout::Plugin
     host     = get_option(:host)
     port     = get_option(:port)
     socket   = get_option(:socket)
-    entries  = get_option(:entries).split(' ').to_set
     query    = 'SHOW /*!50002 GLOBAL */ STATUS'
 
-    now = Time.now
     # mysql = Mysql.connect(host, user, password, nil, (port.nil? ? nil : port.to_i), socket)
     # result = mysql.query('SHOW /*!50002 GLOBAL */ STATUS')
-
-    cmd = %Q[`#{mysql} --user="#{user}" --host="#{host}" --password="#{password}" --execute="#{query.gsub(/"/,'\"')}"`]
-    result = eval(cmd).split("\n").collect!{|row| row.split("\t")}[1..-1]
-
-    rows = []
-    total = 0
-    result.each do |row| 
-      rows << row if entries.include?(row.first)
-
-      total += row.last.to_i if row.first[0..3] == 'Com_'
+    cmd = "#{mysql}"
+    [:user, :password, :host, :port, :socket].each do |option_name|
+      cmd << " --#{option_name}='#{get_option(option_name)}'`" if get_option(option_name)
     end
+    cmd << "--execute='#{query}'"
+  end
+  
+  def retreive_output(cmd)
+    Open3.popen3(cmd) do |stdin, stdout, stderr|
+      result = stdout.gets
 
+      raise "#{stderr.gets}\n for #{cmd}" unless result
+
+      return result
+    end
+  end
+  
+  def calculate_report(output)
     report_hash = {}
-    rows.each do |row|
-      name = row.first
-      value = calculate_counter(now, name, row.last.to_i)
+    now = Time.now
+    total = 0
+
+    entries = get_option(:entries).to_s.split(' ').to_set
+    output.split("\n")[1..-1].each do |row|
+      name,value = row.split("\t")
+      next unless entries.include?(name)
+      value=value.to_i
+      total += value if name[0..3] == 'Com_'
+      value = calculate_counter(now, name, value)
+
       # only report if a value is calculated
       next unless value
       report_hash[name] = value
     end
 
     total_val = calculate_counter(now, 'total', total)
-    report_hash['total'] = total_val if total_val
-    
-    report(report_hash)
+    report_hash['total'] = total_val if total_val    
   end
-
-  private
   
   # Returns nil if an empty string
   def get_option(opt_name)
