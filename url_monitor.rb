@@ -1,9 +1,32 @@
+# Scout URL monitoring plugin, patched for multi-urls
+# URLs should be splited with a semicolon
+# Example: "http://google.com;http://yahoo.com:81/index.html"
+
 require 'benchmark'
 require 'net/http'
 require 'net/https'
 require 'uri'
 
 class UrlMonitor < Scout::Plugin
+  OPTIONS=<<-EOS
+  options:
+    url:
+      name: Url
+      notes: The full URL (including http://) of the URL to monitor. You can provide basic authentication options as well (http://user:pass@domain.com)
+      default: "http://www.scoutapp.com/"
+
+  metadata:
+    response_time:          
+      label: Response Time
+      units: secs
+      precision: 2
+      larger_is_better: false
+    up:          
+      label: Url Reachable
+      precision: 0
+      larger_is_better: true
+  EOS
+
   include Net
 
   TEST_USAGE = "#{File.basename($0)} url URL last_run LAST_RUN"
