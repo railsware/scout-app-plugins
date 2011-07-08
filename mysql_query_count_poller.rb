@@ -1,4 +1,18 @@
-class MysqlCountPoller < Scout::Plugin
+# MySQL Query Count Poller
+# =================================
+# Created by [Dmitry Larkin](http://github.com/dml)
+# 
+# Returs result row from query. This can be used as query counter poller.
+# 
+# Dependencies
+# ------------
+# Requires the mysql command
+# 
+# Compatibility 
+# -------------
+# 
+
+class MysqlQueryCountPoller < Scout::Plugin
   def build_report
     library_available? 'open3'    
     report(query_output)

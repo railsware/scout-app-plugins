@@ -1,9 +1,67 @@
+# MySQL Replication Monitor
+# =================================
+# Created by [Dmitry Larkin](http://github.com/dml)
+# 
+# Returs mysql replication staus.
+# 
+# Dependencies
+# ------------
+# Requires the mysql gem and mysql connection
+# 
+# Compatibility 
+# -------------
+# 
+
 require 'time'
 require 'date'
 
 class MissingLibrary < StandardError; end
 class MysqlReplicationMonitor < Scout::Plugin
+  OPTIONS=<<-EOS
+  --- 
+  options:
+    host:
+      name: Host
+      notes: MySQL Host
+      default: localhost
+    username:
+      name: User
+      notes: MySQL User
+      default: root
+    password:
+      name: Password
+      notes: MySQL Password
+      default: 
+  metadata: !map:HashWithIndifferentAccess 
+    Seconds Behind Master: !map:HashWithIndifferentAccess 
+      units: ""
+      delimiter: ","
+      larger_is_better: "0"
+      precision: "0"
+      label: Seconds behind master
+    Replication Down Time: !map:HashWithIndifferentAccess 
+      units: ""
+      delimiter: ","
+      larger_is_better: "0"
+      precision: "0"
+      label: Replication Down Time
+  triggers: 
+  - max_value: 60.0
+    type: peak
+    dname: Seconds Behind Master
+    population_size: 0
+  - max_value: 60.0
+    type: plateau
+    dname: Seconds Behind Master
+    population_size: 0
+    duration: 10
+  - max_value: 2.0
+    type: plateau
+    dname: Replication Down Time
+    population_size: 0
+    duration: 10
 
+  EOS
   attr_accessor :connection
 
   def setup_mysql
