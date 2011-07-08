@@ -1,6 +1,50 @@
-require 'open-uri'
+# 
+# This is a Scout (http://scoutapp.com) plugin that monitors nginx and 
+# sends the data back to scout.
+# 
+# For more info, visit:
+# https://scoutapp.com/plugin_urls/static/creating_a_plugin
+# 
+# In order to have this plugin running, you need to make sure that your 
+# version of Nginx was compiled with the Stub Status module.
+# 
+# On Ubuntu Hardy, the nginx package comes with Stub Status compiled in so 
+# if you installed Nginx via apt-get or aptitude, you should have it.
+# 
+# Make sure you have the following in your nginx config file:
+# 
+# location /nginx_status {
+#   stub_status on;
+#   access_log   off;
+#   allow 127.0.0.1;
+#   deny all;
+# }
+# 
+# Requires "open-uri" gem
+# ---- History ----
 
+require 'open-uri'
 class NginxReport < Scout::Plugin
+  OPTIONS=<<-EOS
+  options:
+    url:
+      name: Nginx Status
+      notes: Default status for of nginx instance. Will reset at some point. At rotate.
+      default: http://127.0.0.1/nginx_status
+  metadata:
+    reading:
+      precision: 0
+    writing:
+      precision: 0
+    waiting:
+      precision: 0
+    requests:
+      precision: 0
+    requests_throughput:
+      units: /sec
+      precision: 3
+
+  EOS
 
   def build_report  
     total, requests, reading, writing, waiting = nil
