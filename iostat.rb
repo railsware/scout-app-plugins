@@ -1,4 +1,62 @@
+# Improved IO Statistics Plugin
+# =================================
+# Created by [Yaroslav Lazor](http://github.com/yaroslavlazor)
+# 
+# Reports the following IO staticics : rps, wps, rkbps, wkbps, await, util
+# Configurable per device or the device mounted to root partition.
+# 
+# Dependencies
+# ------------
+# Requires the iostat command, usually provided by the sysstat package.
+# 
+# Compatibility 
+# -------------
+# 
+# Works on Linux and OSX. 
+
+
 class Iostat < Scout::Plugin
+  OPTIONS=<<-EOS
+  options:
+    command:
+      name: iostat Command
+      notes: The command used to display IO statistics
+      default: "iostat -dxk"
+    interval:
+      name: iostat Interval
+      notes: Report current usage as the average over this many seconds.
+      default: 5 
+    device:
+      name: Device
+      notes: The device to check, eg 'sda1'. If not specified, last one from iostat -dxk
+      default:      
+  metadata:
+    rps:
+      label: Reads/sec
+    wps:
+      label: Writes/sec
+    rkbps:
+      label: Read kBps
+      units: kB/s
+    wkbps:
+      label: Write kBps
+      units: kB/s
+    await:
+      label: I/O Wait
+      units: ms
+    svctm:
+      label: Service Time
+      units: ms
+    util:
+      label: Utilization
+      units: %
+
+  triggers:
+    - type: peak
+      dname: util
+      max_value: 80%
+  EOS
+
   def build_report
     # Using the second reading- avg since previous check
     output = iostat_output(device())
