@@ -1,10 +1,92 @@
+# Network Statistics Plugin
+# =================================
+# Created by [Yaroslav Lazor](http://github.com/yaroslavlazor)
+# Based on Eric Lindvall <eric@5stops.com> code
 # 
-# Created by Eric Lindvall <eric@5stops.com>
-#
+# Reports the difference of mysql 'SHOW GLOBAL STATUS' of following fields :
+# Per Second :
+#  [Com_insert, Com_select, Com_update, Com_delete, Select_scan, Sort_rows, Sort_scan, Created_tmp_disk_tables]
+# Per Minute :
+#  [Slow_queries]
+# List of fields is configurable
+# 
+# Dependencies
+# ------------
+# Requires gems : [set, mysql]
+# 
+# Compatibility 
+# -------------
+# 
 
 require 'set'
-
 class MysqlQueryStatistics < Scout::Plugin
+  OPTIONS=<<-EOS
+  options:
+    user:
+      name: MySQL username
+      notes: Specify the username to connect with
+      default: root
+    password:
+      name: MySQL password
+      notes: Specify the password to connect with
+    host:
+      name: MySQL host
+      notes: Specify something other than 'localhost' to connect via TCP
+      default: localhost
+    port:
+      name: MySQL port
+      notes: Specify the port to connect to MySQL with (if nonstandard)
+    socket:
+      name: MySQL socket
+      notes: Specify the location of the MySQL socket
+    entries:
+      name: Entries
+      notes: 
+      default: Com_insert Com_select Com_update Com_delete Slow_queries Select_scan Sort_rows Sort_scan Created_tmp_disk_tables
+
+  metadata:
+    Com_select:
+      label: Select Queries
+      units: /sec
+    Com_delete:
+      label: Delete Queries
+      units: /sec
+    Com_update:
+      label: Update Queries
+      units: /sec
+    Com_insert:
+      label: Insert Queries
+      units: /sec
+    Com_replace:
+      label: Replace Queries
+      units: /sec
+    total:
+      label: Total Queries
+      units: /sec
+    Slow_queries:
+      label: Slow Queries
+      units: /sec
+    Select_scan:
+      label: Select Scan
+      units: /sec
+    Sort_rows:
+      label: Sort Rows
+      units: /sec
+    Sort_scan:
+      label: Sort scan
+      units: /sec
+    Created_tmp_disk_tables:
+      label: Created tmp disk tables
+      units: /sec
+
+  triggers:    
+    - type: trend
+      data_series_name: total
+      direction: UP                            
+      percentage_change: 30                    
+      duration: 60                           
+      window_reference: LAST_WEEK
+  EOS
   
   # needs "mysql"
   needs "open3"
