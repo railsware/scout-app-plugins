@@ -16,7 +16,7 @@ class FileCounter < Scout::Plugin
   OPTIONS=<<-EOS
   directory:
     name: "directory"
-    notes: "Traget directory"
+    notes: "Target directory"
     default: "/var/log"
   command:
     name: "command"
