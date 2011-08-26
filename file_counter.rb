@@ -37,7 +37,7 @@ class FileCounter < Scout::Plugin
       error("Could not get number of files in #{option(:directory)} directory") and return
     end      
     
-    if (threshold !=0) && (files_count >= option(:threshold))
+    if (threshold !=0) && (files_count >= threshold)
       alert("#{option(:directory)} files count (#{files_count}) exceeded allowable threshold (#{threshold})")
     end
   
