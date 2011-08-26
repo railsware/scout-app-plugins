@@ -40,7 +40,7 @@
 #    
 # Dependencies
 # ------------
-# Requires gems : [set, mysql]
+# Requires gems : [set]
 # 
 # Compatibility 
 # -------------
@@ -48,29 +48,22 @@
 
 class LogWatcher < Scout::Plugin
   OPTIONS=<<-EOS
-  options:
-    log_path:
-      default: /var/log/my.log
-      name: Log path
-      notes: Full path to the the log file
-    service_name:
-      default: MyService
-      name: Service name
-      notes: Name of the service - the owner of the log. Will be shown in the alert
-    value_pipe:
-      default: egrep "PottencialError" | egrep -v "Junk" | wc -l
-      name: Value Pipe
-      notes: A pipe command that goes right aftail tail #{log}
-    error_pipe:
-      default: egrep "PottencialError" | egrep -v "Junk" | sort | uniq -c | sort -nr
-      name: Error Pipe
-      notes: A pipe command that goes right aftail tail #{log} to aggregate the errors and send a notification over scout
-
-  metadata:
-    value:
-      unit: /min
-      precision: 2
-
+  log_path:
+    default: /var/log/my.log
+    name: Log path
+    notes: Full path to the the log file
+  service_name:
+    default: MyService
+    name: Service name
+    notes: Name of the service - the owner of the log. Will be shown in the alert
+  value_pipe:
+    default: egrep "PottencialError" | egrep -v "Junk" | wc -l
+    name: Value Pipe
+    notes: A pipe command that goes right aftail tail log
+  error_pipe:
+    default: egrep "PottencialError" | egrep -v "Junk" | sort | uniq -c | sort -nr
+    name: Error Pipe
+    notes: A pipe command that goes right aftail tail log to aggregate the errors and send a notification over scout
   EOS
 
   def init
