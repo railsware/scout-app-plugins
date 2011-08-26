@@ -1,8 +1,7 @@
 # Directory File Counter
 # =================================
-# Created by [Dmitry Larkin](http://github.com/dml)
-# 
-# Returs directory file count.
+# Returns directory file count
+# Alerts if there are too many files in directory
 #
 # Dependencies
 # ------------
@@ -15,32 +14,34 @@
 
 class FileCounter < Scout::Plugin
   OPTIONS=<<-EOS
-  options:
-    directory:
-      name: directory
-      notes: Traget directory
-      default: '/var/log'
-    command:
-      name: command
-      notes: 'Command which used four counting. Examples: `ls -l | wc -l -2` or `find . -type f | wc -l`'
-      default: 'find . -type f | wc -l'
-
-  metadata:
-    count:
-      label: Count
-      precision: 0
-
-  triggers:
-    - type: peak
-      dname: count
-      max_value: 4
+  directory:
+    name: "directory"
+    notes: "Traget directory"
+    default: "/var/log"
+  command:
+    name: "command"
+    notes: 'Command which used four counting. Examples: `ls -l | wc -l -2` or `find . -type f | wc -l`'
+    default: 'find . -type f | wc -l'
+  threshold:
+    name: "Threshold"
+    notes: "Threshold of allowed files number per directory, use 0 for unlimited"
+    default: 0
   EOS
 
   def build_report
-    report(:count => find_files.strip.to_i)
-  rescue Exception => e
-    error "Couldn't parse output. Make sure you have proper SQL. #{e}"
-    logger.error e
+    threshold = option(:threshold).to_i
+    begin
+      files_count = find_files.strip.to_i
+    rescue Exception => e
+      logger.error e
+      error("Could not get number of files in #{option(:directory)} directory") and return
+    end      
+    
+    if (threshold !=0) && (files_count >= option(:threshold))
+      alert("#{option(:directory)} files count (#{files_count}) exceeded allowable threshold (#{threshold})")
+    end
+  
+    report(:count => files_count)
   end
 
   private
