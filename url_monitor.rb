@@ -9,23 +9,28 @@ require 'uri'
 
 class UrlMonitor < Scout::Plugin
   OPTIONS=<<-EOS
-  options:
-    url:
-      name: Url
-      notes: The full URL (including http://) of the URL to monitor. You can provide basic authentication options as well (http://user:pass@domain.com)
-      default: "http://www.scoutapp.com/"
-
-  metadata:
-    response_time:          
-      label: Response Time
-      units: secs
-      precision: 2
-      larger_is_better: false
-    up:          
-      label: Url Reachable
-      precision: 0
-      larger_is_better: true
+  url:
+    name: Url
+    notes: The full URL (including http://) of the URL to monitor. You can provide basic authentication options as well (http://user:pass@domain.com)
+    default: "http://www.scoutapp.com/"
   EOS
+
+  # options:
+  #   url:
+  #     name: Url
+  #     notes: The full URL (including http://) of the URL to monitor. You can provide basic authentication options as well (http://user:pass@domain.com)
+  #     default: "http://www.scoutapp.com/"
+  # 
+  # metadata:
+  #   response_time:          
+  #     label: Response Time
+  #     units: secs
+  #     precision: 2
+  #     larger_is_better: false
+  #   up:          
+  #     label: Url Reachable
+  #     precision: 0
+  #     larger_is_better: true
 
   include Net
 
